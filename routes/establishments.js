@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var axios =require('axios');
 
 const knex = require('../db/knex');
 
@@ -8,36 +9,36 @@ function validForm(form) {
           form.name.trim() != '';
 }
 
-/* GET home page. */
+
+// GET ALL ESTABLISHMENTS GET ALL ESTABLISHMENTS GET ALL ESTABLISHMENTS GET ALL ESTABLISHMENTS GET ALL ESTABLISHMENTS
 router.get('/', function(req, res, next) {
-  knex('establishment')
-    .select()
-    .then(establishmentsGot => {
-      res.render('establishments', { establishmentsGot: establishmentsGot });
+  axios.get('https://freebees-backend.herokuapp.com/establishments')
+    .then((establishmentsGot) => {
+      res.render('establishments', { establishmentsGot: establishmentsGot.data.data });
     })
 });  //closes router.get
+ // GET ALL ESTABLISHMENTS GET ALL ESTABLISHMENTS GET ALL ESTABLISHMENTS GET ALL ESTABLISHMENTS GET ALL ESTABLISHMENTS
 
+
+// SEND TO NEW ESTABLISHMENTS FORM SEND TO NEW ESTABLISHMENTS FORM SEND TO NEW ESTABLISHMENTS FORM SEND TO NEW ESTABLISHMENTS FORM
 router.get('/new', function(req, res, next) {
   res.render('establishmentsForm');
 });  //closes router.get
+ // SEND TO NEW ESTABLISHMENTS FORM SEND TO NEW ESTABLISHMENTS FORM SEND TO NEW ESTABLISHMENTS FORM SEND TO NEW ESTABLISHMENTS FORM
 
+
+// GET ESTABLISHMENTS BY ID GET ESTABLISHMENTS BY ID GET ESTABLISHMENTS BY ID GET ESTABLISHMENTS BY ID GET ESTABLISHMENTS BY ID
 router.get('/:id', function(req, res, next) {
   const id = req.params.id;
-  if(typeof id != 'undefined') {
-    knex('establishment')
-    .select()
-    .where('id', id)
-    .first()
+  axios.get('https://freebees-backend.herokuapp.com/establishments/'+id)
     .then(establishment => {
-      res.render('establishmentsSingle', establishment);
+      console.log(establishment.data.data);
+      res.render('establishmentsSingle', establishment.data.data);
     })
-  } else {
-    res.status(500);
-    res.render('error', {
-      message: 'Invalid id'
-    })
-  }
 });  //closes router.get
+ // GET ESTABLISHMENTS BY ID GET ESTABLISHMENTS BY ID GET ESTABLISHMENTS BY ID GET ESTABLISHMENTS BY ID GET ESTABLISHMENTS BY ID
+
+
 
 router.get('/:id/freebees', function(req, res, next) {
   const ids = {
